@@ -134,9 +134,15 @@ class IntlPhoneField extends StatefulWidget {
   ///
   /// ```dart
   /// initialCountryCode: 'IN', // India
-  /// initialCountryCode: '+225', // Côte d'Ivoire
   /// ```
   final String? initialCountryCode;
+
+  /// 2 letter ISO Code or country dial code.
+  ///
+  /// ```dart
+  /// initialCountryCode: '+225',
+  /// ```
+  final String? initialCountryDialCode;
 
   /// List of Country to display see countries.dart for format
   final List<Country>? countries;
@@ -253,6 +259,7 @@ class IntlPhoneField extends StatefulWidget {
     Key? key,
     this.formFieldKey,
     this.initialCountryCode,
+    this.initialCountryDialCode,
     this.languageCode = 'en',
     this.disableAutoFillHints = false,
     this.obscureText = false,
@@ -326,6 +333,9 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       number = number.replaceFirst(RegExp("^${_selectedCountry.fullCountryCode}"), "");
     } else {
       _selectedCountry = _countryList.firstWhere((item) => item.code == (widget.initialCountryCode ?? 'US'),
+          orElse: () => _countryList.first);
+
+      _selectedCountry = _countryList.firstWhere((item) => item.dialCode == (widget.initialCountryDialCode ?? '1'),
           orElse: () => _countryList.first);
 
       // remove country code from the initial number value
